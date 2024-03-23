@@ -16,4 +16,8 @@ module.exports = {
       sepolia: process.env.ETHERSCAN_API_KEY,
     },
   },
+  paths: {
+    artifacts:"./client/src/artifacts",
+  },
+  
 };

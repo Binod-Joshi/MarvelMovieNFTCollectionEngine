@@ -1,13 +1,13 @@
 const hre = require("hardhat");
 
 async function main(){
-   const metaDataURL = "ipfs://QmZjiVjNgswJ8kVqvXVZNiQsMXfPdJtLFrUnvziwzS9wys";
+   const metaDataURL = "ipfs://QmZjiVjNgswJ8kVqvXVZNiQsMXfPdJtLFrUnvziwzS9wys/";
    
    const movieNFTCollectionFactory = await hre.ethers.getContractFactory("MovieNFTCollection");
    const movieNFTCollection = await movieNFTCollectionFactory.deploy(metaDataURL);
    await movieNFTCollection.waitForDeployment();
 
-   console.log(movieNFTCollection.target); //
+   console.log(movieNFTCollection.target); //0xD96D37259057a9E231d942101a0949DC87296766
    console.log(hre.network.config.chainId);
    if (hre.network.config.chainId === 11155111 && process.env.Etherscan_API_KEY) {
     console.log(`waiting for 6 confirmation.`);

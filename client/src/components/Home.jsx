@@ -5,12 +5,15 @@ import {
   contractABI,
   contractAddress,
 } from "../contractDetails/ContractDetails";
+import { useNavigate } from "react-router-dom";
 import "./Home.css";
 
 const Home = () => {
+  const navigate = useNavigate();
   const [walletConnected, setWalletConnected] = useState("");
   const [loading, setLoading] = useState(false);
   const [tokenIdsMinted, setTokenIdsMinted] = useState(0);
+  const [baseUrlOfNFT, setBaseUrlOfNFT] = useState("");
   // Create a reference to the Web3 Modal (used for connecting to Metamask) which persists as long as the page is open
   const web3ModalRef = useRef();
 
@@ -64,6 +67,24 @@ const Home = () => {
     }
   };
 
+  const getBaseTokenUrl = async () => {
+    try {
+      const provider = await getProviderOrSigner();
+      const contract = new ethers.Contract(
+        contractAddress,
+        contractABI,
+        provider
+      );
+      console.log(contract);
+      const baseUrlOfNFT = await contract.baseTokenURI();
+      const Url = baseUrlOfNFT.split("//");
+      console.log(Url[1]);
+      setBaseUrlOfNFT(Url[1]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // get the num fo tokenID that have been minted.
   const getTokenIdsMinted = async () => {
     try {
@@ -93,6 +114,8 @@ const Home = () => {
       connectWallet();
 
       getTokenIdsMinted();
+
+      getBaseTokenUrl();
 
       setInterval(async function () {
         await getTokenIdsMinted();
@@ -134,7 +157,18 @@ const Home = () => {
             It&#39;s an NFT collection for LearnWeb3 students.
           </div>
           <div className="description">
-            {tokenIdsMinted}/10 have been minted
+            {tokenIdsMinted}/15 have been minted
+          </div>
+          <div>
+            <button
+              onClick={(e) =>
+                navigate(`/viewMintedNFT/${baseUrlOfNFT}/${tokenIdsMinted}`)
+              }
+              className="button"
+            >
+              {" "}
+              View All Minted NFT.
+            </button>
           </div>
           {renderButton()}
         </div>

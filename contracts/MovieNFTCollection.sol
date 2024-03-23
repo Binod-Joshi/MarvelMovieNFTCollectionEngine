@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 contract MovieNFTCollection is ERC721Enumerable, Ownable { 
     using Strings for uint256;
 
-    string baseTokenURI;
+    string public baseTokenURI;
     uint256 public constant price = 0.01 ether;
     bool public paused;
     uint256 public constant maxNumOfTokenId = 15;

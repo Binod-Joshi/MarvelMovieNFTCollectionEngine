@@ -52,6 +52,7 @@ const Home = () => {
       setLoading(true);
       await nftMintTx.wait();
       window.alert("You successfully minted a marvel movie NFT.");
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -62,6 +63,7 @@ const Home = () => {
       console.log("connect wallet function");
       await getProviderOrSigner();
       setWalletConnected(true);
+      console.log("walletConnected");
     } catch (error) {
       console.log(error);
     }
@@ -80,6 +82,7 @@ const Home = () => {
       const Url = baseUrlOfNFT.split("//");
       console.log(Url[1]);
       setBaseUrlOfNFT(Url[1]);
+      return Url[1];
     } catch (error) {
       console.log(error);
     }
@@ -102,6 +105,27 @@ const Home = () => {
     }
   };
 
+  const viewAllMintedNFT = async() => {
+    try {
+        try {
+          let data;
+          if (!baseUrlOfNFT) {
+          data = await getBaseTokenUrl();
+          console.log(data);
+          }
+          if (data || baseUrlOfNFT) {
+            let targetValue = baseUrlOfNFT || data;
+            navigate(`/viewMintedNFT/${targetValue}/${tokenIdsMinted}`)
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     if (!walletConnected) {
       // The `current` value is persisted throughout as long as this page is open
@@ -115,7 +139,7 @@ const Home = () => {
 
       getTokenIdsMinted();
 
-      getBaseTokenUrl();
+      // getBaseTokenUrl();
 
       setInterval(async function () {
         await getTokenIdsMinted();
@@ -151,19 +175,17 @@ const Home = () => {
       <div className="main">
         <div>
           <h1 className="title">
-            Welcome to the Marvel Avengers Movie NFT Collection Engine
+            Welcome to the Marvel Avengers Movie NFT Collection Engine.
           </h1>
           <div className="description">
             It&#39;s an NFT collection for LearnWeb3 students.
           </div>
           <div className="description">
-            {tokenIdsMinted}/15 have been minted
+            {tokenIdsMinted}/15 have been minted.
           </div>
           <div>
             <button
-              onClick={(e) =>
-                navigate(`/viewMintedNFT/${baseUrlOfNFT}/${tokenIdsMinted}`)
-              }
+              onClick={viewAllMintedNFT}
               className="button"
             >
               {" "}
@@ -171,12 +193,6 @@ const Home = () => {
             </button>
           </div>
           {renderButton()}
-        </div>
-        <div>
-          <img
-            className="image"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6HMTH7T9b8g5NHXQQAMrA_EeNBqA1vA5nPrsxP_PPXQ&s"
-          />
         </div>
       </div>
       <footer className="footer">Made with &#10084; by Binod Joshi</footer>

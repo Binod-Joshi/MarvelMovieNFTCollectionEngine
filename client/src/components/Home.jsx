@@ -51,6 +51,7 @@ const Home = () => {
       });
       setLoading(true);
       await nftMintTx.wait();
+      getTokenIdsMinted();
       window.alert("You successfully minted a marvel movie NFT.");
       setLoading(false);
     } catch (error) {
@@ -143,12 +144,11 @@ const Home = () => {
 
       setInterval(async function () {
         await getTokenIdsMinted();
-      }, 50 * 1000);
+      }, 5 * 1000);
     }
   }, [walletConnected]);
 
   const renderButton = () => {
-    // If wallet is not connected, return a button which allows them to connect their wallet
 
     if (!walletConnected) {
       return (
@@ -173,7 +173,7 @@ const Home = () => {
   return (
     <div>
       <div className="main">
-        <div>
+        <div style={{marginLeft:"15px"}}>
           <h1 className="title">
             Welcome to the Marvel Avengers Movie NFT Collection Engine.
           </h1>

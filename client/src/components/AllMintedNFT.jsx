@@ -10,35 +10,49 @@ const AllMintedNFT = () => {
 
     console.log(metaDataCID, numOfMintedToken);
     
-    const getAllMintedNFT = async (index) => {
-      console.log("trying to get metaData of all NFT");
-      try {
-        let metaDataOfNFT = await fetch(`https://ipfs.io/ipfs/${metaDataCID}/${index}.json`);
-
-        if (metaDataOfNFT.ok) {
-          console.log(metaDataOfNFT);
-          try {
-            metaDataOfNFT = await metaDataOfNFT.json();
-            setMetaDataCollection(prevState => [...prevState, metaDataOfNFT]);
-            console.log("The meta of NFT collection is ", metaDataOfNFT);
-          } catch (error) {
-            console.log("Non-JSON response received:", await response.text());
+    const getAllMintedNFT = async () => {
+      let fetchedData = [];
+      
+      for (let index = 0; index < numOfMintedToken; index++) {
+        console.log("trying to get metaData of all NFT");
+        console.log(index);
+        try {
+          let metaDataOfNFT = await fetch(`https://ipfs.io/ipfs/${metaDataCID}/${index}.json`);
+    
+          if (metaDataOfNFT.ok) {
+            console.log(metaDataOfNFT);
+            try {
+              metaDataOfNFT = await metaDataOfNFT.json();
+              fetchedData.push(metaDataOfNFT);
+              console.log("The meta of NFT collection is ", metaDataOfNFT);
+            } catch (error) {
+              console.log("Non-JSON response received:", await response.text());
+            }
+          } else {
+            console.error("HTTP error:", response.statusText);
           }
-        } else {
-          console.error("HTTP error:", response.statusText);
+        } catch (error) {
+          console.error("Network error:", error);
         }
-      } catch (error) {
-        console.error("Network error:", error);
+      }
+      
+      // Filter out duplicates before updating state
+      const uniqueData = fetchedData.filter((item, index, self) =>
+        index === self.findIndex((t) => (
+          t.name === item.name && t.description === item.description
+        ))
+      );
+    
+      if (metaDataCollection.length < numOfMintedToken) {
+        console.log(metaDataCollection.length);
+        setMetaDataCollection(prevState => [...prevState, ...uniqueData]);
       }
     };
-    
 
     useEffect(() => {
-      for (let index = 0; index < numOfMintedToken; index++) {
-        console.log(index);
-        getAllMintedNFT(index);
-      }
-  }, []);
+      console.log("hei");
+        getAllMintedNFT();
+  }, [numOfMintedToken]);
 
     console.log(metaDataCollection);
 

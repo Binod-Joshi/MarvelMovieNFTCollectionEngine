@@ -21,6 +21,7 @@
     width: 98.5vw;
     /* height: 100vh; */
     grid-template-columns: 1fr 1fr 1fr;
+    margin-top: 10px;
   }
   .singleFile {
     /* border: 2px solid white; */

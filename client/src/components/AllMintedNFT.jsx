@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import "./AllMintedNFT.css"
 
-const AllMintedNFT = () => {
+const AllMintedNFT = () => { 
     const params = useParams();
     const metaDataCID = params.baseUrlOfNFT;
     const numOfMintedToken = params.tokenIdsMinted;
